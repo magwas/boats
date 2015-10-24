@@ -1,50 +1,90 @@
 #!/usr/bin/python
 
-mm=0.001
-l1=300*mm
-l2=212.132*mm
-l3=20*mm
-l4=15*mm
-d1=2*mm
-d2=4*mm
-y1=37.0274*mm
-y2=47.5126*mm
-y3=33.0229*mm
-y4=98.8305*mm
-y5=50.5126*mm
-a=11.313*mm
-b=5.6569*mm
-a1=2.8284*mm
-b1=2.8284*mm
-dl1=7.0711*mm
+mm=0.001 #mm in m
+g=10 #gravitation
 
-y=108.73*mm
-M=4000
+#Beam length in m
+L=2
+#ama max weight in kg
+m=500
 
-I0=(a**3)*b/3
-I1=(a1**3)*b/12
+a1=300*mm
+b1=1*mm
+l1=150.5*mm
 
-#I for one flat rod
-If = I0+2*(I1+(dl1**2)*a1*b/2)
-Af = l3*d2
+a2=1.4142*mm
+b2=149.2929*mm
+l2=148*mm
 
-print "If=%s"%(If,)
+a3=16*mm
+b3=4*mm
+l3=142.3431*mm
 
-#I for top element
-It=(d1**3)*l1/3
-At=l1*d1
+a4=5.6569*mm
+b4=7.3137*mm
+l4=74.6464*mm
 
-#I for side element, lower approximation
-Is=((l4-4*mm)**3)*b1/3
 
-print "Is=%s"%(Is,)
-#I for all the beam
+b5=8.4853*mm
+l5=9.8995*mm
 
-I=If*6 + Af*(2*(y1**2)+2*(y2**2)+2*(y4**2)) + It+2*Is+At*((y5**2)+2*(y4**2))
+b6=11.3137*mm
+l6=8.4853*mm
 
-print "I=%s"%(I,)
 
-E=-M*y/I
+def Irectangular(vertical,horizontal):
+    return vertical**3*horizontal/3
 
-print "E=%s"%(E,)
+I1=Irectangular(a1,b1)
+I2=Irectangular(a2,b2)
+I3=Irectangular(a3,b3)
+I4=Irectangular(a4,b4)
+I5=Irectangular(a4,b5)
+I6=Irectangular(a4,b6)
 
+print "I values for parts:"
+print I1,I2,I3,I4,I5,I6
+
+A1=a1*b1
+A2=a2*b2
+A3=a3*b3
+A4=a4*b4
+A5=a4*b5
+A6=a4*b6
+
+y=(l1*A1+l2*A2*2+l3*A3*2+l4*A4*2+l5*A5+l6*A6)/(A1+A2*2+A3*2+A4*2+A5+A6)
+
+print "centerline:"
+print y/mm
+
+Y=127.3287*mm
+assert(abs(y-Y)<0.0001)
+y1=l1-y
+y2=l2-y
+y3=l3-y
+y4=l4-y
+y5=l5-y
+y6=l6-y
+
+print "distances from centerline:"
+print y1,y2,y3,y4,y5,y6
+
+def Ipara(Ipart,offset,area):
+    return Ipart+offset**2*area
+
+I = Ipara(I1,y1,A1)+2*Ipara(I2,y2,A2)+2*Ipara(I3,y3,A3)+2*Ipara(I4,y4,A4)+Ipara(I5,y5,A5)+Ipara(I6,y6,A6)
+
+print "Area moment of inertia for whole beam:"
+print I
+
+M=L*m*g
+
+print "Moment (Nm):"
+print M
+
+ymax=Y 
+stress = M*ymax/I
+
+print "stress (N/m2, a.k.a. Pa), and in MPa:"
+print stress, stress/1000000
+print "(tensile strength for steel is >> 200 MPa)"

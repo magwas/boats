@@ -67,7 +67,7 @@ STANDARD
 9
 $CLAYER
 8
-Floor layout
+Deck layout
 9
 $DIMASZ
 40
@@ -223,9 +223,9 @@ AcDbViewportTableRecord
 21
 1
 12
-32.7634441166
+29.927334877
 22
-47.0964140998
+48.4601396331
 13
 0
 23
@@ -251,9 +251,9 @@ AcDbViewportTableRecord
 37
 0
 40
-3.39523285867
+1.32254092518
 41
-1.9348534202
+1.9332247557
 42
 50
 43
@@ -1465,9 +1465,9 @@ AcDbSymbolTableRecord
 100
 AcDbLayerTableRecord
 2
-Deck (plate)
+deck (plate)
 70
-0
+1
 62
 7
 6
@@ -1489,7 +1489,7 @@ AcDbLayerTableRecord
 2
 hull draft
 70
-0
+1
 62
 7
 6
@@ -1599,7 +1599,7 @@ AcDbLayerTableRecord
 2
 helper
 70
-0
+5
 62
 7
 6
@@ -5983,7 +5983,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -6905,7 +6905,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -7331,7 +7331,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -7757,7 +7757,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -8183,7 +8183,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -8609,7 +8609,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -9035,7 +9035,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -9461,7 +9461,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -9887,7 +9887,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -10313,7 +10313,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -10739,7 +10739,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -11165,7 +11165,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -11591,7 +11591,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -12017,7 +12017,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -12443,7 +12443,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -12869,7 +12869,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -13791,7 +13791,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -14217,7 +14217,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -14643,7 +14643,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -15069,7 +15069,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -15495,7 +15495,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -15921,7 +15921,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -16347,7 +16347,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -16773,7 +16773,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -17199,7 +17199,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -17625,7 +17625,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -18051,7 +18051,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -18477,7 +18477,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -18903,7 +18903,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -19329,7 +19329,7 @@ LWPOLYLINE
 100
 AcDbEntity
 8
-Deck (plate)
+deck (plate)
 6
 ByLayer
 62
@@ -139878,6 +139878,246 @@ AcDbLine
 63.393
 21
 92.0853
+0
+LINE
+5
+4C4
+100
+AcDbEntity
+8
+helper
+6
+ByLayer
+62
+256
+370
+-1
+100
+AcDbLine
+10
+58.4558011783
+20
+96.507508456
+11
+58.4568044972
+21
+96.0941486249
+0
+LINE
+5
+4C5
+100
+AcDbEntity
+8
+helper
+6
+ByLayer
+62
+256
+370
+-1
+100
+AcDbLine
+10
+58.3679812993
+20
+96.3554375594
+11
+58.5007812993
+21
+96.3925375594
+0
+LINE
+5
+4C6
+100
+AcDbEntity
+8
+helper
+6
+ByLayer
+62
+256
+370
+-1
+100
+AcDbLine
+10
+58.8411473028
+20
+96.4840473585
+11
+58.7717473028
+21
+96.4659473585
+0
+LINE
+5
+4C7
+100
+AcDbEntity
+8
+helper
+6
+ByLayer
+62
+256
+370
+-1
+100
+AcDbLine
+10
+58.8358000589
+20
+96.5084308003
+11
+58.8368033778
+21
+96.0950709692
+0
+LINE
+5
+4C8
+100
+AcDbEntity
+8
+helper
+6
+ByLayer
+62
+256
+370
+-1
+100
+AcDbLine
+10
+58.8617593581
+20
+96.1144957278
+11
+58.7725475555
+21
+96.1373142816
+0
+LINE
+5
+4C9
+100
+AcDbEntity
+8
+helper
+6
+ByLayer
+62
+256
+370
+-1
+100
+AcDbLine
+10
+58.5011972574
+20
+96.209416536
+11
+58.4345082505
+21
+96.2275930694
+0
+LINE
+5
+4CA
+100
+AcDbEntity
+8
+Deck layout
+6
+ByLayer
+62
+256
+370
+-1
+100
+AcDbLine
+10
+58.4564951426
+20
+96.2216003954
+11
+58.836740697
+21
+96.1208949894
+0
+LINE
+5
+4CB
+100
+AcDbEntity
+8
+Deck layout
+6
+ByLayer
+62
+256
+370
+-1
+100
+AcDbLine
+10
+58.836740697
+20
+96.1208949894
+11
+58.8358625885
+21
+96.4826690684
+0
+LINE
+5
+4CC
+100
+AcDbEntity
+8
+Deck layout
+6
+ByLayer
+62
+256
+370
+-1
+100
+AcDbLine
+10
+58.8358625885
+20
+96.4826690684
+11
+58.4561105297
+21
+96.3800579995
+0
+LINE
+5
+4CD
+100
+AcDbEntity
+8
+Deck layout
+6
+ByLayer
+62
+256
+370
+-1
+100
+AcDbLine
+10
+58.4561105297
+20
+96.3800579995
+11
+58.4564951426
+21
+96.2216003954
 0
 ENDSEC
 0
