@@ -6,6 +6,34 @@ from sympy import *
 #mm, m, cm = symbols('mm, m, cm')
 data = {}
 
+phi, W, p_f, p_h, th, K_w, K_t = symbols("phi, W, p_f, p_h, th, K_w, K_t")
+
+data[phi] = 0.5
+
+data[W] = 300
+
+data[p_f] = 2.6
+
+data[p_h] =  1.2
+
+data[th] = 0.001*W*(1/p_f+(1-phi)/phi*1/p_h)
+
+data[th] = data[th].subs(data)
+
+data[K_w] = 2.8*phi+0.16
+
+print "thickness=%02f mm"%(data[th])
+
+data[K_w] = data[K_w].subs(data)
+
+print "K_w=%02f mm"%(data[K_w])
+
+data[K_t] = sqrt(1/(3.3*phi**2+0.703))
+
+data[K_t] = data[K_t].subs(data)
+
+print "K_t=%02f mm, t = %02f"%(data[K_t], 0.7*data[K_t])
+
 L, L_wl, a, b, l, v, R = symbols("L, L_wl, a, b, l, v, R")
 
 data[L] = 7.0
@@ -50,13 +78,13 @@ for f in [F_vb, F_vs, F_vf, F_vl, F_vsf, F_vsl, F_vbw, F_vsw]:
 G_WB, G_WS, G_WS_min, G_WB_min, G_WF, G_WK, G_K, G_WD, G_WD_min = symbols("G_WB, G_WS, G_WS_min, G_WB_min, G_WF, G_WK, G_K, G_WD, G_WD_min")
 
 G, G_min, P, F_v = symbols("G, G_min, P, F_v")
-data[G] = 1.57*b*F_p*F_v*sqrt(P)
-data[G_min] = 1.1*(350+5*L)*sqrt(P)
+data[G] = K_w*1.57*b*F_p*F_v*sqrt(P)
+data[G_min] = K_w*1.1*(350+5*L)*sqrt(P)
 
 w_keel, G_K = symbols("w_keel, G_K")
 
 data[w_keel] = 25*L+300
-data[G_K] = 2.35*(350+5*L)*sqrt(P_dbmf)
+data[G_K] = K_w*2.35*(350+5*L)*sqrt(P_dbmf)
 
 W_BL, W_BL_min, W_SL, W_SL_min, W_RM, W_RM_min, W_RS, W_RS_min = symbols("W_BL, W_BL_min, W_SL, W_SL_min, W_RM, W_RM_min, W_RS, W_RS_min")
 e, l = symbols("e,l")
@@ -96,10 +124,10 @@ def calcOneModulus(themodulus,pressure,distance,span):
     return w
 
 def calcStiffenerHeight(w,themodulus, layers,span):
-    m=data[W].subs(f,7*0.7/10*8).subs(t_s,7*0.7).subs(F,layers*0.7/10*min(span/20,30)).subs(data)-w
+    m=data[W].subs(f,7*th/10*8).subs(t_s,7*th).subs(F,layers*th/10*min(span/20,30)).subs(data)-w
     height = solve(m)[2].as_real_imag()
     assert(height[1]<0.00001)
-    m=data[W].subs(f,7*0.7/10*8).subs(t_s,layers*0.7/2).subs(F,layers*0.7/10*min(span/20,30)).subs(data)-w*2
+    m=data[W].subs(f,7*th/10*8).subs(t_s,layers*th/2).subs(F,layers*th/10*min(span/20,30)).subs(data)-w*2
     height2 = solve(m)[2].as_real_imag()
     assert(height2[1]<0.00001)
     print " %s: %.2f, %.2f, %.2f, %.2f, %.2f"%(themodulus,w,sqrt(6*w/0.35), sqrt(6*w/0.49), height[0]/10.0, height2[0]/10.0)
@@ -137,7 +165,7 @@ def laminateWeight(label, pressure, speed_factor, plateWidth, plateLength, heade
         ws.append(w)
     w=max(ws)
     c = ceiling(w/300)
-    print " G: %.2f, %.2f, %d, %.2f"%(w,w/300.0, c, c*0.7)
+    print " G: %.2f, %.2f, %d, %.2f"%(w,w/300.0, c, c*data[th])
     layers.append(c)
     return max(layers)
 
