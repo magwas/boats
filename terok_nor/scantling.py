@@ -6,7 +6,7 @@ from sympy import *
 #mm, m, cm = symbols('mm, m, cm')
 data = {}
 
-phi, W, p_f, p_h, th, K_w, K_t = symbols("phi, W, p_f, p_h, th, K_w, K_t")
+phi, W, p_f, p_h, th, K_w, K_t, rho_zB, density = symbols("phi, W, p_f, p_h, th, K_w, K_t, rho_zB, density")
 
 data[phi] = 0.5
 
@@ -16,7 +16,13 @@ data[p_f] = 2.6
 
 data[p_h] =  1.2
 
-data[th] = 0.001*W*(1/p_f+(1-phi)/phi*1/p_h)
+data[density] = p_f*phi+(1-phi)*p_h
+
+data[density] = data[density].subs(data)
+
+print "density=%02f g/cm3"%(data[density])
+
+data[th] = 0.001*W*(1/p_f+(1-phi)/phi*1/p_h) #mm
 
 data[th] = data[th].subs(data)
 
@@ -33,6 +39,11 @@ data[K_t] = sqrt(1/(3.3*phi**2+0.703))
 data[K_t] = data[K_t].subs(data)
 
 print "K_t=%02f mm, t = %02f"%(data[K_t], 0.7*data[K_t])
+
+data[rho_zB] = 1278*phi**2-510*phi+123
+data[rho_zB] = data[rho_zB].subs(data)
+
+print "rho_zB=%02f "%(data[rho_zB])
 
 L, L_wl, a, b, l, v, R = symbols("L, L_wl, a, b, l, v, R")
 
@@ -117,20 +128,21 @@ data[W] = (f*h)/10+(t_s*h**2)/3000*(1+100*(F-f)/(100*F+t_s*h))
 
 def calcOneModulus(themodulus,pressure,distance,span):
     w=data[themodulus].subs(P,pressure)
-    w=w.subs(data)
+    w=w.subs(data) #cm3
     w=w.subs(e,distance)
     w=w.subs(l,span)
     w=w.subs(data)
     return w
 
 def calcStiffenerHeight(w,themodulus, layers,span):
-    m=data[W].subs(f,7*th/10*8).subs(t_s,7*th).subs(F,layers*th/10*min(span/20,30)).subs(data)-w
+    stiffenerlayers=10
+    m=data[W].subs(f,stiffenerlayers*th/10*8).subs(t_s,stiffenerlayers*th).subs(F,layers*th/10*min(span/20,30)).subs(data)-w
     height = solve(m)[2].as_real_imag()
     assert(height[1]<0.00001)
-    m=data[W].subs(f,7*th/10*8).subs(t_s,layers*th/2).subs(F,layers*th/10*min(span/20,30)).subs(data)-w*2
+    m=data[W].subs(f,stiffenerlayers*th/10*8).subs(t_s,layers*th/2).subs(F,layers*th/10*min(span/20,30)).subs(data)-w*2
     height2 = solve(m)[2].as_real_imag()
     assert(height2[1]<0.00001)
-    print " %s: %.2f, %.2f, %.2f, %.2f, %.2f"%(themodulus,w,sqrt(6*w/0.35), sqrt(6*w/0.49), height[0]/10.0, height2[0]/10.0)
+    print " %s: %.2f, %.2f, %.2f, %.2f, %.2f"%(themodulus,w,sqrt(6.0*w/7.0/data[th]*10.0), sqrt(6.0*w/10.0/data[th]*10.0), height[0]/10.0, height2[0]/10.0)
 
 def sectionModulus(label,modulus,pressure,distance,span,layers=5):
     ws=[]
@@ -146,6 +158,9 @@ def sectionModulus(label,modulus,pressure,distance,span,layers=5):
 
 print "keel width:", data[w_keel].subs(data).subs(data)
 w = data[G_K].subs(data).subs(data)
+c = ceiling(w/300)
+print " keel: %.2f, %.2f, %d, %.2f"%(w,w/300.0, c, c*data[th])
+
 print "keel laminate weight:", w, w/300
 
 def laminateWeight(label, pressure, speed_factor, plateWidth, plateLength, header=True):
@@ -199,3 +214,78 @@ l_ = sqrt((714.0-548)**2+(224-799)**2)
 laminateWeight("cockpit wall", P_dd, 1, l_, 1000)
 laminateWeight("cabin side", P_dd, 1, 1300-800+100, 3840-2600+200)
 
+print "-----------beam--------------"
+g=10.0 #gravitation
+
+#Beam length in m
+L=4.624
+#ama max weight in kg
+m1=500
+#mainhull max weight in kg
+m2=500
+layers=8
+h=0.15
+w=0.2
+l=(layers*th/1000).subs(data)
+x=2*l*sqrt(1/4+h**2/w**2)
+k=l/h*sqrt(w**2/4+h**2)
+
+a1=l
+b1=w+2*k
+l1=x+h
+
+a2=h
+b2=2*k
+l2=x
+
+a3=x
+b3=2*k
+l3=0
+
+def Irectangular(vertical,horizontal):
+    return vertical**3*horizontal/3
+
+def Itriangular(vertical,horizontal):
+    return vertical**3*horizontal/12
+
+I1=Irectangular(a1,b1)
+I2=Irectangular(a2,b2)
+I3=Itriangular(a3,b3)
+
+print "I values for parts:"
+print I1,I2,I3
+
+A1=a1*b1
+A2=a2*b2
+A3=a3*b3/2
+
+y=(l1*A1+l2*A2+l3*A3)/(A1+A2+A3)
+
+print "centerline:"
+print y
+
+y1=l1-y
+y2=l2-y
+y3=l3-y
+
+print "distances from centerline:"
+print y1,y2,y3
+
+def Ipara(Ipart,offset,area):
+    return Ipart+offset**2*area
+
+I = Ipara(I1,y1,A1)+Ipara(I2,y2,A2)+Ipara(I3,y3,A3)
+
+print "Area moment of inertia for whole beam:"
+print I
+
+M=(L*m1 + L/2*m2)*g # L/2 is mainhull position
+
+print "Moment (Nm):"
+print M
+
+stress = M*y/I
+
+print "stress (N/m2, a.k.a. Pa), and in MPa:"
+print stress, stress/1000000
+print "(strength = %f MPa )"%(data[rho_zB])
