@@ -10,7 +10,7 @@ phi, W, p_f, p_h, th, K_w, K_t, rho_zB, density = symbols("phi, W, p_f, p_h, th,
 
 data[phi] = 0.5
 
-data[W] = 300
+#data[W] = 300
 
 data[p_f] = 2.6
 
@@ -27,8 +27,6 @@ data[th] = 0.001*W*(1/p_f+(1-phi)/phi*1/p_h) #mm
 data[th] = data[th].subs(data)
 
 data[K_w] = 2.8*phi+0.16
-
-print "thickness=%02f mm"%(data[th])
 
 data[K_w] = data[K_w].subs(data)
 
@@ -134,40 +132,44 @@ def calcOneModulus(themodulus,pressure,distance,span):
     w=w.subs(data)
     return w
 
-def calcStiffenerHeight(w,themodulus, layers,span):
-    stiffenerlayers=10
-    m=data[W].subs(f,stiffenerlayers*th/10*8).subs(t_s,stiffenerlayers*th).subs(F,layers*th/10*min(span/20,30)).subs(data)-w
+def calcStiffenerHeight(w,themodulus, baseWeight ,span):
+    stiffenerThickness1=1.82/10
+    stiffenerThickness2=3.75/10
+    baseThickness=data[th].subs(W,baseWeight).subs(data)/10
+    m=data[W].subs(f,stiffenerThickness1*8).subs(t_s,stiffenerThickness1*10).subs(F,baseThickness*min(span/20,30)).subs(data)-w
     height = solve(m)[2].as_real_imag()
     assert(height[1]<0.00001)
-    m=data[W].subs(f,stiffenerlayers*th/10*8).subs(t_s,layers*th/2).subs(F,layers*th/10*min(span/20,30)).subs(data)-w*2
+    m=data[W].subs(f,stiffenerThickness2*8).subs(t_s,stiffenerThickness2*10).subs(F,baseThickness*min(span/20,30)).subs(data)-w
     height2 = solve(m)[2].as_real_imag()
     assert(height2[1]<0.00001)
-    print " %s: %.2f, %.2f, %.2f, %.2f, %.2f"%(themodulus,w,sqrt(6.0*w/7.0/data[th]*10.0), sqrt(6.0*w/10.0/data[th]*10.0), height[0]/10.0, height2[0]/10.0)
+    print " %s: %.2f, %.2f, %.2f, %.2f, %.2f"%(themodulus,w,sqrt(6.0*w/stiffenerThickness1), sqrt(6.0*w/stiffenerThickness2), height[0]/10.0, height2[0]/10.0)
 
-def sectionModulus(label,modulus,pressure,distance,span,layers=5):
+def sectionModulus(label, modulus, pressure, distance, span, baseWeight):
     ws=[]
     for themodulus in [modulus, minimums[modulus], crosses[modulus], minimums[crosses[modulus]]]:
-        w = calcOneModulus(themodulus,pressure,distance,span)
-        ws.append((themodulus,w))
-    w=max(ws[0][1],ws[1][1])
+        w = calcOneModulus(themodulus, pressure, distance, span)
+        ws.append((themodulus, w))
+    w=max(ws[0][1], ws[1][1])
     themodulus=ws[0][0]
-    calcStiffenerHeight(w,themodulus, layers,span)
-    w=max(ws[2][1],ws[2][1])
+    calcStiffenerHeight(w, themodulus, baseWeight, span)
+    w=max(ws[2][1], ws[2][1])
     themodulus=ws[2][0]
-    calcStiffenerHeight(w,themodulus, layers,span)
+    calcStiffenerHeight(w, themodulus, baseWeight, span)
 
 print "keel width:", data[w_keel].subs(data).subs(data)
 w = data[G_K].subs(data).subs(data)
-c = ceiling(w/300)
-print " keel: %.2f, %.2f, %d, %.2f"%(w,w/300.0, c, c*data[th])
+print " keel: %.2f"%(w)
 
 print "keel laminate weight:", w, w/300
+
+LaminateWeights=[1500, 2140, 2140, 2330, 2780, 3080]
+
 
 def laminateWeight(label, pressure, speed_factor, plateWidth, plateLength, header=True):
     if header:
         print label, pressure, speed_factor, plateWidth,"x",plateLength
     assert(plateLength>=plateWidth)
-    layers=[]
+    nominalws=[]
     ws=[]
     for g in (G,G_min):
         w=data[g].subs(P,pressure)
@@ -177,18 +179,21 @@ def laminateWeight(label, pressure, speed_factor, plateWidth, plateLength, heade
         w=w.subs(l,plateLength)
         w=w.subs(F_v,speed_factor)
         w=w.subs(data)
-        ws.append(w)
+        nominalws.append(w)
+        for i in LaminateWeights:
+            if i > w:
+                ws.append(i)
+                break
     w=max(ws)
-    c = ceiling(w/300)
-    print " G: %.2f, %.2f, %d, %.2f"%(w,w/300.0, c, c*data[th])
-    layers.append(c)
-    return max(layers)
+    nominalw=max(nominalws)
+    print " G: %.2f %.2f"%(nominalw, w)
+    return w
 
 
 def weightAndStiffeners(label, pressure, speed_factor, plateWidth, plateLength, modulus):
     print label, modulus, pressure, speed_factor, plateWidth,"x",plateLength
-    layers = laminateWeight(label, pressure, speed_factor, plateWidth, plateLength, header=False)
-    sectionModulus(label, modulus, pressure, plateWidth, plateLength/1000, layers)
+    w = laminateWeight(label, pressure, speed_factor, plateWidth, plateLength, header=False)
+    sectionModulus(label, modulus, pressure, plateWidth, plateLength/1000, w)
 
 print "---------------- laminate weights -----------"
 weightAndStiffeners("bottom fore main side", P_dbsf, F_vb, 450.0, 500.0, W_BL)
@@ -223,10 +228,10 @@ L=4.624
 m1=500
 #mainhull max weight in kg
 m2=500
-layers=8
+beamThickness=3.75
 h=0.15
 w=0.2
-l=(layers*th/1000).subs(data)
+l=beamThickness/1000
 x=2*l*sqrt(1/4+h**2/w**2)
 k=l/h*sqrt(w**2/4+h**2)
 
